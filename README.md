@@ -1,2 +1,7 @@
 # Pomo
-A pomodoro timer that doesn't suck (hopefully!).
+A more fully fledged Pomodoro timer.  
+###To do:  
+- Set a goal amount of pomodoros per day
+- Statistics for the week
+
+
