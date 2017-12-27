@@ -1,9 +1,10 @@
 import cmds
 
-commandList = ["help","pomodoro","long","exit","cleanlog"]
+commandList = ["help","pomodoro","exit","cleanlog"]
 
-print("Hello, and welcome to Pomo! If you have any features you want implemented, please log it as an issue or download the source code and open a pull request.")
+print("Hello, and welcome to Pomo! If you have any features you want implemented, please log it as an issue or modify the source code and open a pull request.")
 print("Made by Alexander Sieusahai (ItsPax).")
+cmds.init()
 while(True):
     print("Please enter a command or input \"help\" to see a list of commands.")
     cmd = input()
