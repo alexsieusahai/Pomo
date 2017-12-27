@@ -70,6 +70,7 @@ def pomodoro():
         f.write('\n')
         f.write(str(POMODORO_CYCLE_LENGTH))
         f.write('\n')
+
     GOAL_POMODOROS_LEFT -= 1
     print("Beginning break...")
     # maybe lock out the keyboard using sys, ik kenboo said he did something similar with his gesture controlled youtube player
