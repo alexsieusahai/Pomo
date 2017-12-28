@@ -1,5 +1,5 @@
 import time
-import datetime 
+import datetime
 import math
 import sys
 
@@ -33,7 +33,7 @@ def init():
                 KEYBOARD_LOCKOUT_ON_BREAK = bool(line[1])
             if line[0] == "GOAL_POMODOROS_LEFT":
                 goalCheck = int(line[1])
-    
+
     # now lets check the date compared to the last date loaded up using the epoch and the concept of an epsilon
     # this will let us see if we should change goal pomodoros left to goal pomodoros without having to go through all the data
     # lets read the last line in config to see the last time we finished a pomodoro
@@ -44,14 +44,14 @@ def init():
         lastDate = lines[-2].split()[0]
         print("Welcome back! The last day you used this application was "+lastDate+'.')
     else:
-        lastDate = "0000-00-00" 
+        lastDate = "0000-00-00"
     currentDate = str(datetime.datetime.today()).split()[0]
     if lastDate != currentDate:
         GOAL_POMODOROS_LEFT = GOAL_POMODOROS
     else:
         GOAL_POMODOROS_LEFT = goalCheck
-    
-    
+
+
 def pomodoro():
     global GOAL_POMODOROS_LEFT
 
@@ -59,7 +59,6 @@ def pomodoro():
     if (GOAL_POMODOROS <= 0):
         print("Look at you! Working so hard!")
     startTime = time.time()
-    print(POMODORO_CYCLE_LENGTH)
     while (time.time()-startTime < POMODORO_CYCLE_LENGTH):
         sys.stdout.write("Work Time! Time Remaining: "+minsSecsString(POMODORO_CYCLE_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
@@ -113,7 +112,7 @@ def minsSecsString(secondsElapsed):
     if (len(millis) == 3):
         millis = millis[:-1]
     # *100 moves decimal places of all digits up by 2, and code before *100 gets the decimal value of secondsElapsed
-    # then round gives you the rounded value that we wanted to begin with 
+    # then round gives you the rounded value that we wanted to begin with
     return mins+':'+secs+':'+millis
 
 def cleanLog():
@@ -125,4 +124,4 @@ def cleanLog():
         print("Okay! Cleaning log now...")
         with open('log','w') as f:
             f.write("")
-    
+
