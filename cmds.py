@@ -1,8 +1,9 @@
 import time
-import datetime 
+import datetime
 import math
 import sys
-import pygame
+import pygame # for audio
+import select # for select()
 
 POMODORO_CYCLE_LENGTH = 1 #default is 25*60
 POMODORO_BREAK_LENGTH = 1 #default is 5*60
@@ -37,7 +38,7 @@ def init():
                 KEYBOARD_LOCKOUT_ON_BREAK = bool(line[1])
             if line[0] == "GOAL_POMODOROS_LEFT":
                 goalCheck = int(line[1])
-    
+
     # now lets check the date compared to the last date loaded up using the epoch and the concept of an epsilon
     # this will let us see if we should change goal pomodoros left to goal pomodoros without having to go through all the data
     # lets read the last line in config to see the last time we finished a pomodoro
@@ -48,25 +49,61 @@ def init():
         lastDate = lines[-2].split()[0]
         print("Welcome back! The last day you used this application was "+lastDate+'.')
     else:
-        lastDate = "0000-00-00" 
+        lastDate = "0000-00-00"
     currentDate = str(datetime.datetime.today()).split()[0]
     if lastDate != currentDate:
         GOAL_POMODOROS_LEFT = GOAL_POMODOROS
     else:
         GOAL_POMODOROS_LEFT = goalCheck
-    
-    
+
+
 def pomodoro():
     global GOAL_POMODOROS_LEFT
 
     print("You have "+str(GOAL_POMODOROS_LEFT)+" pomodoros left for today!")
     if (GOAL_POMODOROS <= 0):
         print("Look at you! Working so hard!")
+
+    # printing some basic instructions
+    print("Instructions: ")
+    print("Press \"p\" to pause, and \"r\" to rewind to the beginning. If you want to rewind a certain amount backwards, supply a number after \"r\".")
+    print("For example, \"r 10\" rewinds the timer back by 10 seconds.")
+    print("To issue your command, press enter.")
+    # add a minutes-seconds option for rewind later maybe
     startTime = time.time()
-    print(POMODORO_CYCLE_LENGTH)
     while (time.time()-startTime < POMODORO_CYCLE_LENGTH):
         sys.stdout.write("Work Time! Time Remaining: "+minsSecsString(POMODORO_CYCLE_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
+        if select.select([sys.stdin],[],[], 0)[0]:
+                # there is some data on stdin
+                pomCmd = input().split()
+                timeStartPause = time.time()
+                if pomCmd[0] == 'p':
+                        # pause
+                        print("Press \"p\" and then enter to unpause.")
+                        while True:
+                            unpauseCheck = input()
+                            if unpauseCheck == 'p':
+                                # unpause
+                                timeEndPause = time.time()
+                                # decrement the time spent paused from start
+                                startTime -= timeStartPause-timeEndPause
+                                break;
+                if pomCmd[0] == 'r':
+                    if len(pomCmd) > 1:
+                        try:
+                            startTime += int(pomCmd[1])
+                            # don't go farther than the cycle set
+                            # should I let the user go farther than the cycle set? 
+                            # for now yes, idk if it's good design or not
+                        except ValueError:
+                            print("It appears you didn't give me an integer as the second argument for r!")
+                    else:
+                        # rewind back to start, which is the same thing as
+                        # subtracting all the time before
+                        startTime -= startTime - time.time()
+                        
+
     print("Good job! Writing to log...")
     with open('log','a') as f:
         f.write(str(datetime.datetime.today()))
@@ -77,11 +114,12 @@ def pomodoro():
     GOAL_POMODOROS_LEFT -= 1
     pygame.mixer.music.play() # the file loaded is located in init()
     print("Beginning break...")
-    # maybe lock out the keyboard using sys, ik kenboo said he did something similar with his gesture controlled youtube player
+    # maybe lock out the keyboard using sys, ik kenta said he did something similar with his gesture controlled youtube player
     startTime = time.time()
     while(time.time()-startTime < POMODORO_BREAK_LENGTH):
         sys.stdout.write("Break Time! Time Remaining: "+minsSecsString(POMODORO_BREAK_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
+    pygame.mixer.music.play()
     print()
 
     with open('config','r') as f:
@@ -117,7 +155,7 @@ def minsSecsString(secondsElapsed):
     if (len(millis) == 3):
         millis = millis[:-1]
     # *100 moves decimal places of all digits up by 2, and code before *100 gets the decimal value of secondsElapsed
-    # then round gives you the rounded value that we wanted to begin with 
+    # then round gives you the rounded value that we wanted to begin with
     return mins+':'+secs+':'+millis
 
 def cleanLog():
@@ -129,4 +167,6 @@ def cleanLog():
         print("Okay! Cleaning log now...")
         with open('log','w') as f:
             f.write("")
-    
+
+#def changeConfig():
+    # allows the user to change the configs set 
