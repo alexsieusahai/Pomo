@@ -2,6 +2,7 @@ import time
 import datetime 
 import math
 import sys
+import pygame
 
 POMODORO_CYCLE_LENGTH = 1 #default is 25*60
 POMODORO_BREAK_LENGTH = 1 #default is 5*60
@@ -13,6 +14,9 @@ KEYBOARD_LOCKOUT_ON_BREAK = False #default is False
 
 # functionality
 def init():
+    #initialize the parts of pygame that let you play sound
+    pygame.mixer.init()
+    pygame.mixer.music.load("alarm.wav") # drop test.wav in current directory
     global POMODORO_BREAK_LENGTH
     global POMODORO_CYCLE_LENGTH
     global GOAL_POMODOROS
@@ -63,7 +67,6 @@ def pomodoro():
     while (time.time()-startTime < POMODORO_CYCLE_LENGTH):
         sys.stdout.write("Work Time! Time Remaining: "+minsSecsString(POMODORO_CYCLE_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
-
     print("Good job! Writing to log...")
     with open('log','a') as f:
         f.write(str(datetime.datetime.today()))
@@ -72,6 +75,7 @@ def pomodoro():
         f.write('\n')
 
     GOAL_POMODOROS_LEFT -= 1
+    pygame.mixer.music.play() # the file loaded is located in init()
     print("Beginning break...")
     # maybe lock out the keyboard using sys, ik kenboo said he did something similar with his gesture controlled youtube player
     startTime = time.time()
