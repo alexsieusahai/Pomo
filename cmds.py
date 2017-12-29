@@ -102,7 +102,6 @@ def pomodoro():
                         # rewind back to start, which is the same thing as
                         # subtracting all the time before
                         startTime -= startTime - time.time()
-                        
 
     print("Good job! Writing to log...")
     with open('log','a') as f:
@@ -119,6 +118,34 @@ def pomodoro():
     while(time.time()-startTime < POMODORO_BREAK_LENGTH):
         sys.stdout.write("Break Time! Time Remaining: "+minsSecsString(POMODORO_BREAK_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
+        if select.select([sys.stdin],[],[], 0)[0]:
+                # there is some data on stdin
+                pomCmd = input().split()
+                timeStartPause = time.time()
+                if pomCmd[0] == 'p':
+                        # pause
+                        print("Press \"p\" and then enter to unpause.")
+                        while True:
+                            unpauseCheck = input()
+                            if unpauseCheck == 'p':
+                                # unpause
+                                timeEndPause = time.time()
+                                # decrement the time spent paused from start
+                                startTime -= timeStartPause-timeEndPause
+                                break;
+                if pomCmd[0] == 'r':
+                    if len(pomCmd) > 1:
+                        try:
+                            startTime += int(pomCmd[1])
+                            # don't go farther than the cycle set
+                            # should I let the user go farther than the cycle set? 
+                            # for now yes, idk if it's good design or not
+                        except ValueError:
+                            print("It appears you didn't give me an integer as the second argument for r!")
+                    else:
+                        # rewind back to start, which is the same thing as
+                        # subtracting all the time before
+                        startTime -= startTime - time.time()
     pygame.mixer.music.play()
     print()
 
