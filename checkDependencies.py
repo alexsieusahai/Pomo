@@ -1,4 +1,16 @@
 try:
+    import pip
+except ImportError:
+    print("Python3 can't import pip. Please try \"sudo apt install python3-pip\", then try again.")
+
+try:
     import pygame
 except ImportError:
-    print("Are you sure you installed pygame properly? Python3 can't import pygame. Try \"pip3 install pygame\". If you do not have pip3 installed, try \"sudo apt install pip3\".")
+    print("Python3 can't import pygame. Try \"pip3 install pygame\".")
+
+try:
+    import dropbox
+except ImportError:
+    print("Python3 can't import dropbox. Try \"pip3 install dropbox\".")
+
+

@@ -4,6 +4,7 @@ import math
 import sys
 import pygame # for audio
 import select # for select()
+import dropbox # solution for logs across multiple systems
 
 POMODORO_CYCLE_LENGTH = 1 #default is 25*60
 POMODORO_BREAK_LENGTH = 1 #default is 5*60
@@ -12,6 +13,10 @@ GOAL_POMODOROS_LEFT = GOAL_POMODOROS
 KEYBOARD_LOCKOUT_ON_BREAK = False #default is False
 # NOTE: Eventually, load these constants from a config.txt file
 # - don't forget to build a text interface to let the user edit them!
+
+# names of the files pertinent to Pomo
+logName = 'pomo-log' # by default
+configName = 'pomo-config' # by default aswell
 
 # functionality
 def init():
@@ -25,7 +30,7 @@ def init():
     global KEYBOARD_LOCKOUT_ON_BREAK
 
     # load the configurations for the constants located in config
-    with open('config','r') as f:
+    with open(configName,'r') as f:
         for line in f.readlines():
             line = line.split()
             if line[0] == "POMODORO_CYCLE_LENGTH":
@@ -43,7 +48,7 @@ def init():
     # this will let us see if we should change goal pomodoros left to goal pomodoros without having to go through all the data
     # lets read the last line in config to see the last time we finished a pomodoro
     # this is a very inefficient procedure since I have to go through all lines in the config file; a better solution will be implemented when i learn sql and switch to an sql db
-    with open('log','r') as f:
+    with open(logName,'r') as f:
         lines = f.readlines()
     if len(lines) > 1: # if there's at least one entry
         lastDate = lines[-2].split()[0]
@@ -94,7 +99,7 @@ def pomodoro():
                         try:
                             startTime += int(pomCmd[1])
                             # don't go farther than the cycle set
-                            # should I let the user go farther than the cycle set? 
+                            # should I let the user go farther than the cycle set?
                             # for now yes, idk if it's good design or not
                         except ValueError:
                             print("It appears you didn't give me an integer as the second argument for r!")
@@ -104,7 +109,7 @@ def pomodoro():
                         startTime -= startTime - time.time()
 
     print("Good job! Writing to log...")
-    with open('log','a') as f:
+    with open(logName,'a') as f:
         f.write(str(datetime.datetime.today()))
         f.write('\n')
         f.write(str(POMODORO_CYCLE_LENGTH))
@@ -138,7 +143,7 @@ def pomodoro():
                         try:
                             startTime += int(pomCmd[1])
                             # don't go farther than the cycle set
-                            # should I let the user go farther than the cycle set? 
+                            # should I let the user go farther than the cycle set?
                             # for now yes, idk if it's good design or not
                         except ValueError:
                             print("It appears you didn't give me an integer as the second argument for r!")
@@ -149,10 +154,10 @@ def pomodoro():
     pygame.mixer.music.play()
     print()
 
-    with open('config','r') as f:
+    with open(configName,'r') as f:
         lines = f.readlines()
         lines[4] = "GOAL_POMODOROS_LEFT "+str(GOAL_POMODOROS_LEFT)
-    with open('config','w') as f:
+    with open(configName,'w') as f:
         f.writelines(lines)
 
 
@@ -192,8 +197,12 @@ def cleanLog():
     arg = input()
     if cleanCmd(arg) == 'y':
         print("Okay! Cleaning log now...")
-        with open('log','w') as f:
+        with open(logName,'w') as f:
             f.write("")
 
+def exitAndGoodbye():
+    print("Goodbye!")
+    exit()
+
 #def changeConfig():
-    # allows the user to change the configs set 
+    # allows the user to change the configs set

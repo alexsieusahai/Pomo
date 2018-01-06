@@ -19,8 +19,8 @@ _First time run:_
 
 
 _To do:_  
+- Dropbox solution for importing your logs
 - Implement some user interface to change the configs in `config.txt` without the user having to manually edit `config.txt`
 - Implement a units solution for the rewind command in `pomodoro()`  
 - Statistics for the week  
 - Statistics for month by month, weekday, etc  
-- Simple to do list  

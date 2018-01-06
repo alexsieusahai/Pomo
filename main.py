@@ -20,7 +20,7 @@ while(True):
         cmds.pomodoro()
 
     if (cmd == "exit"):
-        exit()
+        cmds.exitAndGoodbye()
 
     if (cmd == "cleanlog"):
         cmds.cleanLog()
