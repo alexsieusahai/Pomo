@@ -5,6 +5,11 @@ import sys # stdout and stdin
 import pygame # for audio
 import select # for select()
 
+import updateLog # contains all the log dropbox stuff
+import dropbox
+
+dbx = dropbox.Dropbox('xglEndL0ibAAAAAAAAAAQWanVXdULHt4x0k5ULepFMxfRGdU7vLBd9soY6xodqiK')
+
 POMODORO_CYCLE_LENGTH = 1 #default is 25*60
 POMODORO_BREAK_LENGTH = 1 #default is 5*60
 GOAL_POMODOROS = 1
@@ -27,6 +32,13 @@ def init():
     global GOAL_POMODOROS
     global GOAL_POMODOROS_LEFT
     global KEYBOARD_LOCKOUT_ON_BREAK
+
+    # testing some stuff with oauth
+    updateLog.test(dbx)
+
+    # handle the dropbox login
+    updateLog.verifyLogin(dbx)
+    updateLog.getUpdatedLog(dbx)
 
     # load the configurations for the constants located in config
     with open(configName,'r') as f:

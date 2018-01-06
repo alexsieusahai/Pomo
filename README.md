@@ -19,7 +19,9 @@ _First time run:_
 
 
 _To do:_  
-- Dropbox solution for importing your logs
+- Exchange manually entering token with login process
+- Reorganize constants
+- Set up a merging utility so you can merge the local log and the dropbox log together, then upload the new dropbox log
 - Implement some user interface to change the configs in `config.txt` without the user having to manually edit `config.txt`
 - Implement a units solution for the rewind command in `pomodoro()`  
 - Statistics for the week  
