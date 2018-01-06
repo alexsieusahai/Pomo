@@ -8,7 +8,7 @@ import select # for select()
 import updateLog # contains all the log dropbox stuff
 import dropbox
 
-dbx = dropbox.Dropbox('xglEndL0ibAAAAAAAAAAQWanVXdULHt4x0k5ULepFMxfRGdU7vLBd9soY6xodqiK')
+TOKEN = ''
 
 POMODORO_CYCLE_LENGTH = 1 #default is 25*60
 POMODORO_BREAK_LENGTH = 1 #default is 5*60
@@ -32,9 +32,11 @@ def init():
     global GOAL_POMODOROS
     global GOAL_POMODOROS_LEFT
     global KEYBOARD_LOCKOUT_ON_BREAK
+    global dbx
 
-    # testing some stuff with oauth
-    updateLog.test(dbx)
+    # initialize the dropbox object
+    TOKEN = updateLog.getToken()
+    dbx = dropbox.Dropbox(TOKEN.access_token)
 
     # handle the dropbox login
     updateLog.verifyLogin(dbx)

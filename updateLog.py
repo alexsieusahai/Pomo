@@ -1,5 +1,6 @@
 import sys
 import os
+import webbrowser
 
 import dropbox
 from dropbox.files import WriteMode
@@ -12,34 +13,20 @@ LOGPATH = '/'+'pomo-log.txt'
 def verifyLogin(dbx):
     try:
         dbx.users_get_current_account()
+        print("Login was a success!")
         return True
     except dropbox.exceptions.AuthError:
         sys.exit("Authentication Failed. Please make sure you entered the correct username and password.")
         return False
 
-def test(dbx):
+def getToken():
     auth_flow = DropboxOAuth2FlowNoRedirect('9plb44sduiyoc4p','dvwyswuwvx3bhag')
-    authorize_url = auth_flow.start()
-    print(authorize_url)
-    auth_code = input().strip()
-    oauth_result = auth_flow.finish(auth_code)
-    print(oauth_result)
+    print("You will be redirected to a Dropbox authorization page. Please press \"Allow\" then copy paste the code into the terminal.")
+    webbrowser.open_new(auth_flow.start())
+    return auth_flow.finish(input().strip())
 
-## upload the pomo-log file to the users dropbox
-#with open(cmds.logName, 'rb') as f:
-#    print("Uploading " + cmds.logName + " to Dropbox...")
-#    dbx.files_upload(f.read(), '/'+cmds.logName, mode=WriteMode('overwrite'))
-#
-## download the pomo-log file to the current path
-#print("downloading the log file...")
-#dbx.files_download('/'+cmds.logName)
-#print("Done!")
-#
-## check out the metadata of the log file to get size here
-#print(dbx.files_get_metadata('/'+cmds.logName).size)
-
-# check for existence
 def checkLogExists(dbx):
+    # check for existence of the log file
     try:
         dbx.files_get_metadata(LOGPATH)
         return True
@@ -47,6 +34,7 @@ def checkLogExists(dbx):
         return False
 
 def getUpdatedLog(dbx):
+    # handles updating the log data
     if checkLogExists(dbx):
         # check to see if log has changed
         print("Verified that the log exists! Checking if the log size on server is smaller than the one locally...")
