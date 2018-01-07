@@ -22,6 +22,8 @@ _First time run:_
 2. `git clone https://github.com/ItsPax/Pomo` to get the source code for the application.  
 3. Navigate to the directory.   
 4. `./start` to start the application.  
+5. Clean the log and start anew by typing in `cleanlog`. 
+6. Enjoy!
 
 
 _To do:_  
