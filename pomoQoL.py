@@ -1,3 +1,5 @@
+import math
+
 # quality of life commands
 def cleanCmd(roughCmd):
     # cleanCmd takes in a string roughCmd, then outputs a "cleaned" version that is only lower case letters

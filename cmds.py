@@ -5,6 +5,8 @@ import sys # stdout and stdin
 import pygame # for audio
 import select # for select()
 
+import pomoQoL
+
 import updateLog # contains all the log dropbox stuff
 import dropbox
 
@@ -90,7 +92,7 @@ def pomodoro():
     # add a minutes-seconds option for rewind later maybe
     startTime = time.time()
     while (time.time()-startTime < POMODORO_CYCLE_LENGTH):
-        sys.stdout.write("Work Time! Time Remaining: "+minsSecsString(POMODORO_CYCLE_LENGTH-(time.time()-startTime))+'\r')
+        sys.stdout.write("Work Time! Time Remaining: "+pomoQoL.minsSecsString(POMODORO_CYCLE_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
         if select.select([sys.stdin],[],[], 0)[0]:
                 # there is some data on stdin
@@ -129,12 +131,20 @@ def pomodoro():
         f.write('\n')
 
     GOAL_POMODOROS_LEFT -= 1
+    with open(configName,'r') as f:
+        lines = f.readlines()
+        lines[4] = "GOAL_POMODOROS_LEFT "+str(GOAL_POMODOROS_LEFT)
+    with open(configName,'w') as f:
+        f.writelines(lines)
+    print("Uploading log...")
+    updateLog.uploadLog(dbx)
+
     pygame.mixer.music.play() # the file loaded is located in init()
     print("Beginning break...")
     # maybe lock out the keyboard using sys, ik kenta said he did something similar with his gesture controlled youtube player
     startTime = time.time()
     while(time.time()-startTime < POMODORO_BREAK_LENGTH):
-        sys.stdout.write("Break Time! Time Remaining: "+minsSecsString(POMODORO_BREAK_LENGTH-(time.time()-startTime))+'\r')
+        sys.stdout.write("Break Time! Time Remaining: "+pomoQoL.minsSecsString(POMODORO_BREAK_LENGTH-(time.time()-startTime))+'\r')
         sys.stdout.flush()
         if select.select([sys.stdin],[],[], 0)[0]:
                 # there is some data on stdin
@@ -167,11 +177,6 @@ def pomodoro():
     pygame.mixer.music.play()
     print()
 
-    with open(configName,'r') as f:
-        lines = f.readlines()
-        lines[4] = "GOAL_POMODOROS_LEFT "+str(GOAL_POMODOROS_LEFT)
-    with open(configName,'w') as f:
-        f.writelines(lines)
 
 
 
