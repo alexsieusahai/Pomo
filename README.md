@@ -28,8 +28,6 @@ _First time run:_
 
 _To do:_  
 - Set up a merging utility so you can merge the local log and the dropbox log together, then upload the new dropbox log  
-- Reorganize constants  
-- Implement some user interface to change the configs in `config.txt` without the user having to manually edit `config.txt`  
+- Implement some user interface to change the configs in `pomo-config.txt` without the user having to manually edit `pomo-config.txt`  
 - Implement a units solution for the rewind command in `pomodoro()`  
-- Statistics for the week  
-- Statistics for month by month, weekday, etc  
+- Data is ready and no wrangling needed; what graphs would be useful for a user?  

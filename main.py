@@ -1,7 +1,8 @@
 import cmds
 import pomoQoL
+import graphUtil
 
-commandList = ["help","pomodoro","exit","cleanlog"]
+commandList = ["help","pomodoro","exit","cleanlog", "printGraphs"]
 
 print("Hello, and welcome to Pomo! If you have any features you want implemented, please log it as an issue or modify the source code and open a pull request.")
 print("Made by Alexander Sieusahai (ItsPax).")
@@ -28,4 +29,6 @@ while(True):
     if (cmd == "cleanlog"):
         pomoQoL.cleanLog()
 
-
+    if (cmd == "printgraphs"):
+        print('running printGraphs...')
+        graphUtil.printGraphs()

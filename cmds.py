@@ -125,8 +125,9 @@ def pomodoro():
 
     print("Good job! Writing to log...")
     with open(LOGNAME,'a') as f:
-        f.write(str(datetime.datetime.today()))
-        f.write(' ')
+        dateTime = ' '.join(str(datetime.datetime.today()).split('-')).split(' ')
+        hoursMinutesSeconds = str(dateTime[3]).split(':')
+        f.write(dateTime[0]+' '+dateTime[1]+' '+dateTime[2]+' '+pomoQoL.getWeekday(int(dateTime[2]),int(dateTime[1]),int(dateTime[0]))+' '+hoursMinutesSeconds[0]+' '+hoursMinutesSeconds[1]+' ')
         f.write(str(POMODORO_CYCLE_LENGTH))
         f.write('\n')
 

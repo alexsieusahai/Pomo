@@ -43,5 +43,26 @@ def exitAndGoodbye():
     print("Goodbye!")
     exit()
 
+def getWeekday(day,month,year):
+    """
+    INPUTS:
+        day - what day of the month it is (1-31)
+        month - what month it is (1-12)
+        year: - what year it is (arbitrary integer)
+    RETURNS:
+        weekday given the specified inputs
+    ACKNOWLEDGEMENTS:
+        https://blog.artofmemory.com/how-to-calculate-the-day-of-the-week-4203.html
+    """
+    yearCode = ((year%100)+(year%100)//4)%7
+    monthDict = {1:0, 2:3, 3:3, 4:6, 5:1, 6:4, 7:6, 8:2, 9:5, 10:0, 11:3, 12:5}
+    monthCode = monthDict[month]
+    centuryCode = 6
+    leapYearCode = 0
+    if ((not (year%4) and (year%100)) or not (year%400)):
+        leapYearCode = 1
+    weekdayDict = {0:'Sunday', 1:'Monday', 2:'Tuesday', 3:'Wednesday', 4:'Thursday', 5:'Friday', 6:'Saturday'}
+    return weekdayDict[(yearCode+monthCode+centuryCode+day-leapYearCode)%7]
+
 #def changeConfig():
     # allows the user to change the configs set
