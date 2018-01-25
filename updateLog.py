@@ -53,6 +53,6 @@ def getUpdatedLog(dbx):
 def uploadLog(dbx):
     with open('pomo-log.txt', 'rb') as f:
         print("Uploading log to your Dropbox...")
-        dbx.files_upload(f.read(), LOGPATH,mode=WriteMode('overwrite'))
+        dbx.files_upload(f.read(), LOGPATH, mode=WriteMode('overwrite'))
         print("Done!")
 

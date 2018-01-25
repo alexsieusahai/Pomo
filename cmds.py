@@ -21,12 +21,12 @@ KEYBOARD_LOCKOUT_ON_BREAK = False #default is False
 # - don't forget to build a text interface to let the user edit them!
 
 # names of the files pertinent to Pomo
-logName = 'pomo-log.txt' # by default
-configName = 'pomo-config.txt' # by default aswell
+LOGNAME = 'pomo-log.txt' # by default
+CONFIGNAME = 'pomo-config.txt' # by default aswell
 
 # functionality
 def init():
-    #initialize the parts of pygame that let you play sound
+    #initializb the parts of pygame that let you play sound
     pygame.mixer.init()
     pygame.mixer.music.load("alarm.wav") # drop test.wav in current directory
     global POMODORO_BREAK_LENGTH
@@ -45,7 +45,7 @@ def init():
     updateLog.getUpdatedLog(dbx)
 
     # load the configurations for the constants located in config
-    with open(configName,'r') as f:
+    with open(CONFIGNAME,'r') as f:
         for line in f.readlines():
             line = line.split()
             if line[0] == "POMODORO_CYCLE_LENGTH":
@@ -63,7 +63,7 @@ def init():
     # this will let us see if we should change goal pomodoros left to goal pomodoros without having to go through all the data
     # lets read the last line in config to see the last time we finished a pomodoro
     # this is a very inefficient procedure since I have to go through all lines in the config file; a better solution will be implemented when i learn sql and switch to an sql db
-    with open(logName,'r') as f:
+    with open(LOGNAME,'r') as f:
         lines = f.readlines()
     if len(lines) > 1: # if there's at least one entry
         lastDate = lines[-2].split()[0]
@@ -124,17 +124,17 @@ def pomodoro():
                         startTime -= startTime - time.time()
 
     print("Good job! Writing to log...")
-    with open(logName,'a') as f:
+    with open(LOGNAME,'a') as f:
         f.write(str(datetime.datetime.today()))
-        f.write('\n')
+        f.write(' ')
         f.write(str(POMODORO_CYCLE_LENGTH))
         f.write('\n')
 
     GOAL_POMODOROS_LEFT -= 1
-    with open(configName,'r') as f:
+    with open(CONFIGNAME,'r') as f:
         lines = f.readlines()
         lines[4] = "GOAL_POMODOROS_LEFT "+str(GOAL_POMODOROS_LEFT)
-    with open(configName,'w') as f:
+    with open(CONFIGNAME,'w') as f:
         f.writelines(lines)
     print("Uploading log...")
     updateLog.uploadLog(dbx)
@@ -176,7 +176,3 @@ def pomodoro():
                         startTime -= startTime - time.time()
     pygame.mixer.music.play()
     print()
-
-
-
-
