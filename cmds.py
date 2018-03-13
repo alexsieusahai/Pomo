@@ -19,6 +19,11 @@ GOAL_POMODOROS_LEFT = GOAL_POMODOROS
 KEYBOARD_LOCKOUT_ON_BREAK = False #default is False
 # NOTE: Eventually, load these constants from a config.txt file
 # - don't forget to build a text interface to let the user edit them!
+POMODORO_CYCLE_LENGTH=raw_input("Cycle length->")
+POMODORO_BREAK_LENGTH=raw_input("Break Length->")
+KEYBOARD_LOCKOUT_ON_BREAK=raw_input("Keyboard lockout.True or False.->")
+
+
 
 # names of the files pertinent to Pomo
 LOGNAME = 'pomo-log.txt' # by default
